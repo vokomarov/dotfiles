@@ -8,7 +8,7 @@ alias cr="composer require"
 alias ci="composer install"
 alias cda="composer dump-autoload -o"
 alias hostfile="sudo vi /etc/hosts"
-alias deploy='envoy run deploy'
+# alias deploy='envoy run deploy'
 alias deploy-code='envoy run deploy-code'
 alias mfs='php artisan migrate:fresh --seed'
 alias nah='git reset --hard;git clean -df'
@@ -20,13 +20,15 @@ alias sshconfig="vi ~/.ssh/config"
 alias copykey='command cat ~/.ssh/id_rsa.public | pbcopy'
 
 # JavaScript
-alias jest="./node_modules/.bin/jest"
+# alias jest="./node_modules/.bin/jest"
 
 # Git
 alias gc="git checkout"
 alias gpo="git push origin"
 alias gm="git merge"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+alias ld='lazydocker'
 
 # Fast open
 alias o="open ."
@@ -38,7 +40,7 @@ alias l="ls -laF"
 alias phpstorm='open -a /Applications/PhpStorm.app "`pwd`"'
 
 # Redis
-alias flush-redis="redis-cli FLUSHALL"
+# alias flush-redis="redis-cli FLUSHALL"
 
 # VSCode
 alias code='open -a "/Applications/Visual Studio Code.app" "`pwd`"'
@@ -67,6 +69,3 @@ alias sudo='sudo '
 # Scape webpage
 alias scrape="scrapeUrl"
 
-# Switch NPM
-alias npmnpm="npm config set registry https://registry.npmjs.org"
-alias npmspatie="npm config set registry https://npm.spatie.be"
