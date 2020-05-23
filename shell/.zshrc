@@ -91,3 +91,6 @@ export PATH=/usr/local/bin:$PATH
 # export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 # export PATH="/usr/local/opt/node@8/bin:$PATH"
 
+
+# added by travis gem
+[ -f /Users/vovan/.travis/travis.sh ] && source /Users/vovan/.travis/travis.sh
