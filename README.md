@@ -4,6 +4,13 @@ My personal dotfiles. Originally forked from [@freekmurze](https://githum.com/fr
 
 It contains the installation of some basic tools, some handy aliases and functions.
 
+Software:
+- iTerm2
+- ZSH
+- Oh-My-Zsh
+- PHPStorm
+- GoLand
+
 You can install them by cloning the repository as `.dotfiles` in your home directory and running the bootstrap script.
 
 ```
