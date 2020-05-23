@@ -1,0 +1,25 @@
+<mtTheme>
+  <id>material-my-custom-theme</id>
+  <editorColorsScheme>Material My Color Scheme</editorColorsScheme>
+  <dark>true</dark>
+  <name>Material My Custom Theme</name>
+  <colors>
+    <color id="background" value="282a36ff"/>
+    <color id="foreground" value="f8f8f2ff"/>
+    <color id="text" value="6272a4ff"/>
+    <color id="highlight" value="6272a4ff"/>
+    <color id="selectionBackground" value="4b4c59ff"/>
+    <color id="selectionForeground" value="8be9fdff"/>
+    <color id="button" value="393c4bff"/>
+    <color id="secondaryBackground" value="282a36ff"/>
+    <color id="disabled" value="6272a4ff"/>
+    <color id="contrast" value="191a21ff"/>
+    <color id="tableSelected" value="44475aff"/>
+    <color id="secondBorder" value="21222cff"/>
+    <color id="treeSelection" value="44475a50"/>
+    <color id="notifications" value="1d2228ff"/>
+    <color id="accent" value="ff79c5ff"/>
+    <color id="excluded" value="34353dff"/>
+  </colors>
+  <themeId>material-my-custom-theme</themeId>
+</mtTheme>
