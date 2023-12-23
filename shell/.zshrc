@@ -87,6 +87,7 @@ source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # Extra paths
 export PATH="$HOME/.composer/vendor/bin:$PATH"
 export PATH=/usr/local/bin:$PATH
+export PATH="${HOME}/.pyenv/shims:${PATH}"
 # export PATH="$HOME/.yarn/bin:$PATH"
 # export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 # export PATH="/usr/local/opt/node@8/bin:$PATH"
@@ -94,3 +95,11 @@ export PATH=/usr/local/bin:$PATH
 
 # added by travis gem
 [ -f /Users/vovan/.travis/travis.sh ] && source /Users/vovan/.travis/travis.sh
+
+# kubectl autocomplete
+source <(kubectl completion zsh)
+
+# helm autocomplete
+source <(helm completion zsh)
+
+
