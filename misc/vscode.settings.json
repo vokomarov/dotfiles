@@ -1,0 +1,25 @@
+{
+    "workbench.activityBar.location": "hidden",
+    "workbench.statusBar.visible": false,
+    "editor.hideCursorInOverviewRuler": true,
+    "editor.minimap.enabled": false,
+    "editor.glyphMargin": false,
+    "editor.folding": false,
+    "window.titleBarStyle": "native",
+    "apc.electron": {
+      "titleBarStyle": "hiddenInset",
+      "trafficLightPosition": {
+        "x": 11,
+        "y": 10
+      }
+    },
+    "apc.header": {
+      "height": 36
+    },
+    "apc.stylesheet": {
+      ".title-label > h2": "display: none",
+      ".title-actions": "display: none",
+      ".editor-actions": "display: none",
+      ".nosidebar .inline-tabs-placeholder": "width: 75px"
+    }
+  }

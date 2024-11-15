@@ -82,7 +82,13 @@ ssh-add -A 2>/dev/null;
 export XDEBUG_CONFIG="idekey=VSCODE"
 
 # Enable autosuggestions
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
 # Extra paths
 export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -91,6 +97,9 @@ export PATH="${HOME}/.pyenv/shims:${PATH}"
 # export PATH="$HOME/.yarn/bin:$PATH"
 # export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 # export PATH="/usr/local/opt/node@8/bin:$PATH"
+export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@8.2/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@8.2/sbin:$PATH"
 
 
 # added by travis gem
@@ -102,4 +111,16 @@ source <(kubectl completion zsh)
 # helm autocomplete
 source <(helm completion zsh)
 
+# 1password autocomplete
+eval "$(op completion zsh)"; compdef _op op
 
+# doctl via 1password
+# to setup:
+# - op signin
+# - op plugin init doctl
+# - choose "DigitalOcean Personal Access Token"
+# see: https://developer.1password.com/docs/cli/shell-plugins/digitalocean/?utm_medium=organic&utm_source=oph&utm_campaign=macos
+source /Users/vovan/.config/op/plugins.sh
+
+# doctl autocomplete
+# source <(doctl completion zsh)
