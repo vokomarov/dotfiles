@@ -52,6 +52,11 @@ echo install homebrew
 sudo rm -rf /usr/local/Cellar /usr/local/.git && brew cleanup
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
+# Install all packages from Brewfile
+step "Installing packages from Brewfile"
+brew bundle --file=~/.dotfiles/config/Brewfile || warn "Some packages failed (likely already installed)"
+success "Brewfile processed"
+
 # echo 'Install node'
 # echo '-----------'
 # brew install node@8
@@ -157,6 +162,22 @@ brew cask install --force qlcolorcode qlstephen qlmarkdown quicklook-json qlpret
 echo 'Install zsh-autosuggestions'
 echo '---------------------------'
 brew install zsh-autosuggestions
+
+# Global npm packages
+step "Installing global npm packages"
+npm install -g agent-browser || warn "agent-browser already installed or failed"
+agent-browser install 2>/dev/null || warn "agent-browser setup skipped"
+success "npm packages processed"
+
+# Claude Code setup
+echo ""
+read -p "Install Claude Code? (y/n) " -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    bash ~/.dotfiles/install-claude-code || warn "Claude Code setup had issues"
+else
+    warn "Skipping Claude Code installation"
+fi
 
 echo '++++++++++++++++++++++++++++++'
 echo '++++++++++++++++++++++++++++++'

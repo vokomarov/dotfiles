@@ -98,8 +98,8 @@ export PATH="${HOME}/.pyenv/shims:${PATH}"
 # export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 # export PATH="/usr/local/opt/node@8/bin:$PATH"
 export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
-export PATH="/opt/homebrew/opt/php@8.2/bin:$PATH"
-export PATH="/opt/homebrew/opt/php@8.2/sbin:$PATH"
+export PATH="/opt/homebrew/opt/php@8.4/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@8.4/sbin:$PATH"
 
 
 # added by travis gem
@@ -124,3 +124,4 @@ source /Users/vovan/.config/op/plugins.sh
 
 # doctl autocomplete
 # source <(doctl completion zsh)
+export PATH="$HOME/.local/bin:$PATH"
