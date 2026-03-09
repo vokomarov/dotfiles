@@ -94,7 +94,7 @@ function copySkill(string $src, string $name, string $skillsDir): void
     if (is_dir($dst)) {
         run(['rm', '-rf', $dst]);
     }
-    run(['rsync', '-a', '--exclude=.git', '--exclude=__pycache__', '--exclude=*.pyc', $src . '/', $dst]);
+    run(['rsync', '-a', '--exclude=.*', '--exclude=__pycache__', '--exclude=*.pyc', $src . '/', $dst]);
 }
 
 function loadManifest(string $path): array
