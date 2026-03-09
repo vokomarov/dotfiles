@@ -172,6 +172,65 @@ function removeTmpDir(string $dir): void
 
 // ── commands ──────────────────────────────────────────────────────────────────
 
+function cmdHelp(): void
+{
+    $b = BOLD; $r = RESET; $g = GREEN; $y = YELLOW; $bl = BLUE;
+
+    echo <<<HELP
+
+{$b}claude-skill{$r} — Claude skills manager
+
+{$b}USAGE{$r}
+  claude-skill {$bl}[command]{$r} {$y}[arguments]{$r}
+
+{$b}COMMANDS{$r}
+
+  {$g}(no args){$r}
+    Update all tracked skills from their upstream sources.
+
+  {$g}<name> ...{$r}
+    Update one or more specific skills by name.
+      claude-skill vue-best-practices typefully
+
+  {$g}--list{$r}
+    Show all skills with their git source, subdirectory and ref.
+
+  {$g}outdated{$r}
+    Check which skills have newer upstream versions (uses git ls-remote,
+    no cloning required). Prints only skills that can be updated.
+
+  {$g}install{$r} {$y}<git-url>{$r} {$bl}[options]{$r}
+    Clone a skill from GitHub, detect its name from SKILL.md, copy it
+    into the skills directory, and register it in the manifest.
+
+    Options:
+      {$bl}--subdir{$r} {$y}<path>{$r}     Subdirectory within the repo where the skill lives
+      {$bl}--ref{$r}    {$y}<ref>{$r}      Branch, tag, or commit SHA (default: main)
+      {$bl}--name{$r}   {$y}<name>{$r}     Override the local skill name
+
+    Examples:
+      claude-skill install https://github.com/user/my-skill
+      claude-skill install https://github.com/org/repo --subdir skills/my-skill
+      claude-skill install https://github.com/org/repo --subdir skills/foo --ref v2.0.0
+      claude-skill install https://github.com/org/repo --subdir path/skill --name my-name
+
+  {$g}sync{$r}
+    Scan the skills directory for folders not yet in the manifest and
+    register them with status 'unknown'. Edit the manifest afterwards
+    to set their git source.
+
+  {$g}help{$r}
+    Show this help message.
+
+{$b}NOTES{$r}
+  • Hidden files (e.g. .env) inside a skill directory are preserved across updates.
+  • Hidden directories (e.g. .git) from upstream are never copied into skills.
+  • Manifest: ~/.dotfiles/config/claude/skills-manifest.json
+  • Skills are also updated automatically via the ./update dotfiles script.
+
+HELP;
+}
+
 function cmdList(array $manifest): void
 {
     $tracked = array_filter($manifest['skills'], fn($s) => !empty($s['git']));
@@ -456,6 +515,11 @@ if (!$args || $args === ['--list']) {
     } else {
         cmdUpdate($data, $manifest, [], $skillsDir);
     }
+    exit(0);
+}
+
+if (in_array($args[0], ['help', '--help', '-h'])) {
+    cmdHelp();
     exit(0);
 }
 

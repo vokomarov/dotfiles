@@ -26,26 +26,26 @@ The bootstrap script can be run by cd-ing into the `.dotfiles` directory and per
 ./bootstrap
 ```
 
-## Claude Code skills
+## Claude Code Skills
 
-Skills are managed via `config/claude/skills-manifest.json` and the `config/claude/update-skills` script. All skills are tracked with their upstream GitHub sources.
+Skills are managed via `config/claude/skills-manifest.json` and the `claude-skill` script. All skills are tracked with their upstream GitHub sources.
 
 ### Update all skills
 
 ```bash
-php ~/.dotfiles/config/claude/update-skills
+claude-skill
 ```
 
 ### Update specific skills
 
 ```bash
-php ~/.dotfiles/config/claude/update-skills vue-best-practices typefully
+claude-skill vue-best-practices typefully
 ```
 
 ### List all skills and their sources
 
 ```bash
-php ~/.dotfiles/config/claude/update-skills --list
+claude-skill --list
 ```
 
 ### Install a new skill
@@ -54,16 +54,16 @@ The script clones the skill, detects its name from `SKILL.md`, copies it into th
 
 ```bash
 # Skill is the whole repo
-php ~/.dotfiles/config/claude/update-skills install https://github.com/user/my-skill
+claude-skill install https://github.com/user/my-skill
 
 # Skill lives in a subdirectory of a larger repo
-php ~/.dotfiles/config/claude/update-skills install https://github.com/org/skills-repo --subdir skills/my-skill
+claude-skill install https://github.com/org/skills-repo --subdir skills/my-skill
 
 # Pin to a specific branch, tag, or commit
-php ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo --subdir skills/my-skill --ref v2.0.0
+claude-skill install https://github.com/org/repo --subdir skills/my-skill --ref v2.0.0
 
 # Override the local name (when upstream name differs)
-php ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo --subdir path/to/skill --name my-local-name
+claude-skill install https://github.com/org/repo --subdir path/to/skill --name my-local-name
 ```
 
 ### Check for newer upstream versions
@@ -71,7 +71,7 @@ php ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo 
 Shows only skills that have updates available. Skills without a recorded SHA (never updated via the script) are listed separately. Uses `git ls-remote` — no cloning required.
 
 ```bash
-php ~/.dotfiles/config/claude/update-skills outdated
+claude-skill outdated
 ```
 
 ### Sync manually added skills
@@ -79,7 +79,13 @@ php ~/.dotfiles/config/claude/update-skills outdated
 If you copied a skill directory manually, run `sync` to register any untracked directories into the manifest. They will be added with `status: unknown` — edit the manifest to set their git source.
 
 ```bash
-php ~/.dotfiles/config/claude/update-skills sync
+claude-skill sync
+```
+
+### Show help
+
+```bash
+claude-skill help
 ```
 
 Skills are also updated automatically when running the main `./update` script.
