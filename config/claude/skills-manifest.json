@@ -51,11 +51,12 @@
         },
         {
             "name": "context7-auto-research",
-            "git": "https://github.com/BenedictKing/context7-auto-research",
-            "subdir": null,
+            "git": "https://github.com/freekmurze/dotfiles",
+            "subdir": "config/claude/skills/context7-auto-research",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f2e1b6b0ec995aa5e1fc07f15b2a96ccdb4ef30e"
+            "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
+            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
         },
         {
             "name": "convert-github-issue-to-discussion",
@@ -174,11 +175,11 @@
         },
         {
             "name": "nuxt-ui",
-            "git": "https://github.com/onmax/nuxt-skills",
+            "git": "https://github.com/nuxt/ui",
             "subdir": "skills/nuxt-ui",
-            "ref": "main",
+            "ref": "v4",
             "status": "tracked",
-            "installed_sha": "727c4635c3faaeb8fd71c30fc4e3595d2e53cf6c"
+            "installed_sha": "91c6356e920e6288177e3795aa8ed56bc82907c0"
         },
         {
             "name": "onboarding-cro",
@@ -223,12 +224,12 @@
         },
         {
             "name": "php-guidelines-from-spatie",
-            "git": "https://github.com/spatie/boost-spatie-guidelines",
-            "subdir": "resources/boost/skills/spatie-laravel-php-standards",
+            "git": "https://github.com/freekmurze/dotfiles",
+            "subdir": "config/claude/skills/php-guidelines-from-spatie",
             "ref": "main",
             "status": "tracked",
-            "notes": "upstream skill is named 'spatie-laravel-php-standards'; local name differs",
-            "installed_sha": "1d15ddcd4077f7f7230fa9550fad16b6d78d0493"
+            "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
+            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
         },
         {
             "name": "popup-cro",

@@ -119,10 +119,26 @@ function remoteHeadSha(string $url, string $ref): ?string
 function copySkill(string $src, string $name, string $skillsDir): void
 {
     $dst = $skillsDir . '/' . $name;
+
+    // Preserve hidden files (e.g. .env) that exist locally but not in upstream
+    $preserved = [];
     if (is_dir($dst)) {
+        foreach (scandir($dst) as $entry) {
+            if ($entry === '.' || $entry === '..') continue;
+            $full = $dst . '/' . $entry;
+            if (str_starts_with($entry, '.') && is_file($full)) {
+                $preserved[$entry] = file_get_contents($full);
+            }
+        }
         run(['rm', '-rf', $dst]);
     }
-    run(['rsync', '-a', '--exclude=.*', '--exclude=__pycache__', '--exclude=*.pyc', $src . '/', $dst]);
+
+    run(['rsync', '-a', '--exclude=.*/', '--exclude=__pycache__', '--exclude=*.pyc', $src . '/', $dst]);
+
+    // Restore preserved hidden files
+    foreach ($preserved as $entry => $contents) {
+        file_put_contents($dst . '/' . $entry, $contents);
+    }
 }
 
 function loadManifest(string $path): array
