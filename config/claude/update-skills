@@ -160,8 +160,12 @@ function cmdUpdate(array $manifest, string $manifestPath, array $names, string $
     $skills = $manifest['skills'];
     if ($names) {
         $known = array_column($skills, 'name');
-        foreach (array_diff($names, $known) as $n) {
+        $missing = array_diff($names, $known);
+        foreach ($missing as $n) {
             error("$n: not in manifest");
+        }
+        if ($missing) {
+            exit(1);
         }
         $skills = array_filter($skills, fn($s) => in_array($s['name'], $names));
     }
