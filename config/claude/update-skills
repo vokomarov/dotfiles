@@ -1,0 +1,305 @@
+#!/usr/bin/env python3
+"""
+Manage Claude skills from their source repositories.
+
+Usage:
+  ./update-skills                          # update all tracked skills
+  ./update-skills <name> ...               # update specific skills by name
+  ./update-skills --list                   # list all skills and their status
+  ./update-skills install <git-url>        # install new skill and add to manifest
+    [--subdir <path>]                      #   subdirectory within the repo
+    [--ref <branch|tag|sha>]               #   git ref (default: main)
+    [--name <override>]                    #   override local skill name
+  ./update-skills sync                     # add untracked skill dirs to manifest
+"""
+
+import json
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).parent
+MANIFEST = SCRIPT_DIR / "skills-manifest.json"
+SKILLS_DIR = SCRIPT_DIR / "skills"
+
+BLUE = "\033[0;34m"
+GREEN = "\033[0;32m"
+YELLOW = "\033[1;33m"
+RED = "\033[0;31m"
+RESET = "\033[0m"
+BOLD = "\033[1m"
+
+
+def step(msg):
+    print(f"  {BLUE}➜{RESET} {msg}")
+
+
+def success(msg):
+    print(f"  {GREEN}✓{RESET} {msg}")
+
+
+def warn(msg):
+    print(f"  {YELLOW}⚠{RESET} {msg}")
+
+
+def error(msg):
+    print(f"  {RED}✗{RESET} {msg}", file=sys.stderr)
+
+
+def run(*cmd, cwd=None):
+    result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or f"Command failed: {' '.join(cmd)}")
+    return result
+
+
+def is_sha(ref):
+    return len(ref) >= 7 and all(c in "0123456789abcdefABCDEF" for c in ref)
+
+
+def read_skill_name(skill_dir):
+    """Read the name: field from SKILL.md frontmatter, or None if not found."""
+    skill_md = skill_dir / "SKILL.md"
+    if not skill_md.exists():
+        return None
+    content = skill_md.read_text()
+    m = re.search(r"^name:\s*(.+)$", content, re.MULTILINE)
+    return m.group(1).strip() if m else None
+
+
+def clone_repo(url, ref, subdir, dest):
+    """Clone repo (or sparse-checkout subdir) into dest. Returns the source path."""
+    if subdir:
+        clone_args = ["git", "clone", "--filter=blob:none", "--sparse", "--no-checkout"]
+        if not is_sha(ref):
+            clone_args += ["--branch", ref, "--depth", "1"]
+        clone_args += [url, str(dest)]
+        run(*clone_args)
+        run("git", "sparse-checkout", "set", "--cone", subdir, cwd=dest)
+        run("git", "checkout", ref, cwd=dest)
+        return dest / subdir
+    else:
+        clone_args = ["git", "clone", "--depth", "1"]
+        if not is_sha(ref):
+            clone_args += ["--branch", ref]
+        clone_args += [url, str(dest)]
+        run(*clone_args)
+        if is_sha(ref):
+            run("git", "checkout", ref, cwd=dest)
+        return dest
+
+
+def copy_skill(src, name):
+    """Copy cloned skill source into the skills directory."""
+    dst = SKILLS_DIR / name
+    if dst.exists():
+        shutil.rmtree(dst)
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"))
+
+
+def save_manifest(manifest):
+    manifest["skills"].sort(key=lambda s: s["name"])
+    MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n")
+
+
+# ── commands ──────────────────────────────────────────────────────────────────
+
+def cmd_list(manifest):
+    skills = manifest["skills"]
+    tracked = [s for s in skills if s.get("git")]
+    unknown = [s for s in skills if not s.get("git")]
+
+    print(f"\n{BOLD}Tracked skills ({len(tracked)}):{RESET}")
+    for s in sorted(tracked, key=lambda x: x["name"]):
+        subdir = f" [{s['subdir']}]" if s.get("subdir") else ""
+        ref = s.get("ref", "main")
+        print(f"  {GREEN}✓{RESET} {s['name']:40s} {s['git']}{subdir} @ {ref}")
+
+    print(f"\n{BOLD}Unknown source ({len(unknown)}):{RESET}")
+    for s in sorted(unknown, key=lambda x: x["name"]):
+        notes = f" — {s['notes']}" if s.get("notes") else ""
+        print(f"  {YELLOW}?{RESET} {s['name']}{notes}")
+    print()
+
+
+def cmd_update(manifest, names):
+    SKILLS_DIR.mkdir(exist_ok=True)
+
+    skills = manifest["skills"]
+    if names:
+        known = {s["name"] for s in skills}
+        for name in names - known:
+            error(f"{name}: not in manifest")
+        skills = [s for s in skills if s["name"] in names]
+
+    counts = {"ok": 0, "skipped": 0, "failed": 0}
+    print(f"\n{BOLD}Updating Claude skills{RESET}\n")
+
+    with tempfile.TemporaryDirectory(prefix="claude-skills-") as tmp:
+        for skill in skills:
+            name = skill["name"]
+            url = skill.get("git")
+            if not url:
+                warn(f"{name}: no git source, skipping")
+                counts["skipped"] += 1
+                continue
+
+            ref = skill.get("ref", "main")
+            subdir = skill.get("subdir") or ""
+            location = url + (f" [{subdir}]" if subdir else "") + f" @ {ref}"
+            step(f"{name}  {BLUE}{location}{RESET}")
+
+            try:
+                src = clone_repo(url, ref, subdir, Path(tmp) / name)
+                copy_skill(src, name)
+                success(name)
+                counts["ok"] += 1
+            except Exception as e:
+                error(f"{name}: {e}")
+                counts["failed"] += 1
+
+    ok, skip, fail = counts["ok"], counts["skipped"], counts["failed"]
+    print(f"\n  {GREEN}{ok} updated{RESET}, {YELLOW}{skip} skipped{RESET}, {RED}{fail} failed{RESET}\n")
+    if counts["failed"] > 0:
+        sys.exit(1)
+
+
+def cmd_install(manifest, url, subdir, ref, name_override):
+    """Clone a skill from a git URL, detect its name, copy it, and add to manifest."""
+    SKILLS_DIR.mkdir(exist_ok=True)
+    known = {s["name"] for s in manifest["skills"]}
+
+    print(f"\n{BOLD}Installing skill{RESET}\n")
+    step(f"Cloning {url}" + (f" [{subdir}]" if subdir else "") + f" @ {ref}")
+
+    with tempfile.TemporaryDirectory(prefix="claude-skills-") as tmp:
+        dest = Path(tmp) / "_install"
+        try:
+            src = clone_repo(url, ref, subdir or "", dest)
+        except Exception as e:
+            error(f"Clone failed: {e}")
+            sys.exit(1)
+
+        # Determine skill name
+        name = name_override or read_skill_name(src) or (
+            Path(subdir).name if subdir else url.rstrip("/").split("/")[-1]
+        )
+
+        if name in known:
+            warn(f"'{name}' already in manifest — updating entry and re-downloading")
+
+        step(f"Installing as '{name}'")
+        copy_skill(src, name)
+
+    # Update manifest
+    entry = {
+        "name": name,
+        "git": url,
+        "subdir": subdir or None,
+        "ref": ref,
+        "status": "tracked",
+    }
+    manifest["skills"] = [s for s in manifest["skills"] if s["name"] != name]
+    manifest["skills"].append(entry)
+    save_manifest(manifest)
+
+    success(f"Installed '{name}' and added to manifest")
+    print()
+
+
+def cmd_sync(manifest):
+    """Find skill dirs not in the manifest and register them with unknown status."""
+    if not SKILLS_DIR.exists():
+        warn("Skills directory does not exist")
+        return
+
+    known = {s["name"] for s in manifest["skills"]}
+    untracked = sorted(
+        d.name for d in SKILLS_DIR.iterdir()
+        if d.is_dir() and d.name not in known
+    )
+
+    if not untracked:
+        success("All skill directories are already in the manifest")
+        return
+
+    print(f"\n{BOLD}Untracked skill directories ({len(untracked)}):{RESET}\n")
+    added = []
+    for name in untracked:
+        skill_name = read_skill_name(SKILLS_DIR / name) or name
+        if skill_name != name:
+            print(f"  {YELLOW}+{RESET} {name}  (SKILL.md name: {skill_name})")
+        else:
+            print(f"  {YELLOW}+{RESET} {name}")
+        manifest["skills"].append({
+            "name": name,
+            "git": None,
+            "status": "unknown",
+            "notes": "added by sync; set git source manually",
+        })
+        added.append(name)
+
+    save_manifest(manifest)
+    print(f"\n  Added {len(added)} entr{'y' if len(added) == 1 else 'ies'} to manifest with status 'unknown'.")
+    print(f"  Edit {MANIFEST} to set git sources.\n")
+
+
+# ── entry point ───────────────────────────────────────────────────────────────
+
+def main():
+    if not MANIFEST.exists():
+        error(f"Manifest not found: {MANIFEST}")
+        sys.exit(1)
+
+    manifest = json.loads(MANIFEST.read_text())
+    args = sys.argv[1:]
+
+    if not args or args == ["--list"]:
+        if args == ["--list"]:
+            cmd_list(manifest)
+        else:
+            cmd_update(manifest, set())
+        return
+
+    if args[0] == "--list":
+        cmd_list(manifest)
+        return
+
+    if args[0] == "sync":
+        cmd_sync(manifest)
+        return
+
+    if args[0] == "install":
+        rest = args[1:]
+        if not rest or rest[0].startswith("--"):
+            error("Usage: update-skills install <git-url> [--subdir <path>] [--ref <ref>] [--name <name>]")
+            sys.exit(1)
+
+        url = rest[0]
+        rest = rest[1:]
+
+        subdir = ref = name_override = None
+        i = 0
+        while i < len(rest):
+            if rest[i] == "--subdir" and i + 1 < len(rest):
+                subdir = rest[i + 1]; i += 2
+            elif rest[i] == "--ref" and i + 1 < len(rest):
+                ref = rest[i + 1]; i += 2
+            elif rest[i] == "--name" and i + 1 < len(rest):
+                name_override = rest[i + 1]; i += 2
+            else:
+                error(f"Unknown argument: {rest[i]}")
+                sys.exit(1)
+
+        cmd_install(manifest, url, subdir, ref or "main", name_override)
+        return
+
+    # Positional args = skill names to update
+    cmd_update(manifest, set(args))
+
+
+if __name__ == "__main__":
+    main()

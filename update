@@ -41,6 +41,11 @@ step "Updating global Composer packages"
 composer global update
 success "Composer packages updated"
 
+# Update Claude skills
+step "Updating Claude skills"
+python3 ~/.dotfiles/config/claude/update-skills || warn "Some Claude skills failed to update"
+success "Claude skills updated"
+
 # Reload shell config
 echo ""
 success "Update complete!"

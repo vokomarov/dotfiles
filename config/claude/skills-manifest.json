@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "name": "ab-test-setup",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/ab-test-setup",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "agent-browser",
+      "git": "https://github.com/vercel-labs/agent-browser",
+      "subdir": "skills/agent-browser",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "analytics-tracking",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/analytics-tracking",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "building-native-ui",
+      "git": "https://github.com/expo/skills",
+      "subdir": "plugins/expo-app-design/skills/building-native-ui",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "competitor-alternatives",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/competitor-alternatives",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "content-strategy",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/content-strategy",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "context7-auto-research",
+      "git": "https://github.com/BenedictKing/context7-auto-research",
+      "subdir": null,
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "convert-github-issue-to-discussion",
+      "git": "https://github.com/freekmurze/dotfiles",
+      "subdir": "config/claude/skills/convert-github-issue-to-discussion",
+      "ref": "master",
+      "status": "tracked",
+      "notes": "no standalone upstream; sourced from freekmurze/dotfiles"
+    },
+    {
+      "name": "copy-editing",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/copy-editing",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "copywriting",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/copywriting",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "create-adaptable-composable",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/create-adaptable-composable",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "email-sequence",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/email-sequence",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "fix-github-issue",
+      "git": "https://github.com/freekmurze/dotfiles",
+      "subdir": "config/claude/skills/fix-github-issue",
+      "ref": "master",
+      "status": "tracked",
+      "notes": "no standalone upstream; sourced from freekmurze/dotfiles"
+    },
+    {
+      "name": "form-cro",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/form-cro",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "free-tool-strategy",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/free-tool-strategy",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "frontend-design",
+      "git": "https://github.com/anthropics/skills",
+      "subdir": "skills/frontend-design",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "ios-simulator-skill",
+      "git": "https://github.com/conorluddy/ios-simulator-skill",
+      "subdir": "ios-simulator-skill",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "laravel-inertia-react-structure",
+      "git": "https://github.com/freekmurze/dotfiles",
+      "subdir": "config/claude/skills/laravel-inertia-react-structure",
+      "ref": "master",
+      "status": "tracked",
+      "notes": "no standalone upstream; sourced from freekmurze/dotfiles"
+    },
+    {
+      "name": "launch-strategy",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/launch-strategy",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "marketing-ideas",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/marketing-ideas",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "marketing-psychology",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/marketing-psychology",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "nuxt-ui",
+      "git": "https://github.com/onmax/nuxt-skills",
+      "subdir": "skills/nuxt-ui",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "onboarding-cro",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/onboarding-cro",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "page-cro",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/page-cro",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "paid-ads",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/paid-ads",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "paywall-upgrade-cro",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/paywall-upgrade-cro",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "pdf",
+      "git": "https://github.com/anthropics/skills",
+      "subdir": "skills/pdf",
+      "ref": "main",
+      "status": "tracked",
+      "notes": "Anthropic proprietary license (not OSS)"
+    },
+    {
+      "name": "php-guidelines-from-spatie",
+      "git": "https://github.com/spatie/boost-spatie-guidelines",
+      "subdir": "resources/boost/skills/spatie-laravel-php-standards",
+      "ref": "main",
+      "status": "tracked",
+      "notes": "upstream skill is named 'spatie-laravel-php-standards'; local name differs"
+    },
+    {
+      "name": "popup-cro",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/popup-cro",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "pricing-strategy",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/pricing-strategy",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "product-marketing-context",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/product-marketing-context",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "programmatic-seo",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/programmatic-seo",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "referral-program",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/referral-program",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "review-pr",
+      "git": "https://github.com/freekmurze/dotfiles",
+      "subdir": "config/claude/skills/review-pr",
+      "ref": "master",
+      "status": "tracked",
+      "notes": "no standalone upstream; sourced from freekmurze/dotfiles"
+    },
+    {
+      "name": "schema-markup",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/schema-markup",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "seo-audit",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/seo-audit",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "signup-flow-cro",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/signup-flow-cro",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "social-content",
+      "git": "https://github.com/coreyhaines31/marketingskills",
+      "subdir": "skills/social-content",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "typefully",
+      "git": "https://github.com/typefully/agent-skills",
+      "subdir": "skills/typefully",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "vue-best-practices",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/vue-best-practices",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "vue-debug-guides",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/vue-debug-guides",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "vue-jsx-best-practices",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/vue-jsx-best-practices",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "vue-options-api-best-practices",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/vue-options-api-best-practices",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "vue-pinia-best-practices",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/vue-pinia-best-practices",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "vue-router-best-practices",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/vue-router-best-practices",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "vue-testing-best-practices",
+      "git": "https://github.com/vuejs-ai/skills",
+      "subdir": "skills/vue-testing-best-practices",
+      "ref": "main",
+      "status": "tracked"
+    },
+    {
+      "name": "web-design-guidelines",
+      "git": "https://github.com/vercel-labs/agent-skills",
+      "subdir": "skills/web-design-guidelines",
+      "ref": "main",
+      "status": "tracked"
+    }
+  ]
+}
