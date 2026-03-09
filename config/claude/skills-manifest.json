@@ -92,6 +92,22 @@
             "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
         },
         {
+            "name": "database-optimizer",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/database-optimizer",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
+            "name": "devops-engineer",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/devops-engineer",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
             "name": "email-sequence",
             "git": "https://github.com/coreyhaines31/marketingskills",
             "subdir": "skills/email-sequence",
@@ -133,12 +149,28 @@
             "installed_sha": "b0cbd3df1533b396d281a6886d5132f623393a9c"
         },
         {
+            "name": "golang-pro",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/golang-pro",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
             "name": "ios-simulator-skill",
             "git": "https://github.com/conorluddy/ios-simulator-skill",
             "subdir": "ios-simulator-skill",
             "ref": "main",
             "status": "tracked",
             "installed_sha": "96ff1fee9607f55fdc6c126eb5d06f29f6b4e7d9"
+        },
+        {
+            "name": "kubernetes-specialist",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/kubernetes-specialist",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
         },
         {
             "name": "laravel-inertia-react-structure",
@@ -232,6 +264,14 @@
             "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
         },
         {
+            "name": "php-pro",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/php-pro",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
             "name": "popup-cro",
             "git": "https://github.com/coreyhaines31/marketingskills",
             "subdir": "skills/popup-cro",
@@ -289,6 +329,14 @@
             "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
         },
         {
+            "name": "security-reviewer",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/security-reviewer",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
             "name": "seo-audit",
             "git": "https://github.com/coreyhaines31/marketingskills",
             "subdir": "skills/seo-audit",
@@ -311,6 +359,46 @@
             "ref": "main",
             "status": "tracked",
             "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+        },
+        {
+            "name": "sql-pro",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/sql-pro",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
+            "name": "sre-engineer",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/sre-engineer",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
+            "name": "tailwind-design-system",
+            "git": "https://github.com/wshobson/agents",
+            "subdir": "plugins/frontend-mobile-development/skills/tailwind-design-system",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "a6f0f457c4e41cbb0ad329b691d28e255a829210"
+        },
+        {
+            "name": "terraform-engineer",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/terraform-engineer",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+        },
+        {
+            "name": "the-fool",
+            "git": "https://github.com/Jeffallan/claude-skills",
+            "subdir": "skills/the-fool",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
         },
         {
             "name": "typefully",

@@ -7,19 +7,10 @@ Do not excessively use emojis.
 Prefer using browser agent skill over using playwright directly.
 
 ## Coding Standards
-When working with PHP projects, always use the php-guidelines-from-spatie skill
-
-When working with Vue projects, always use the vue-best-practices skill
-
-When working with Vue options API, always use the vue-options-api-best-practices skill
-
-When working with Vue router, always use the vue-router-best-practices skill
-
-When working with Pinia store in Vue, always use the vue-pinia-best-practices skill
-
-When working with Vue tests, always use the vue-test-best-practices skill
-
-When working with Nuxt UI projects, always use the nuxt-ui skill
+- For all PHP work, prefer the `php-pro` or `php-guidelines-from-spatie` skill over general PHP knowledge.
+- For Vue projects, always load all applicable Vue skills (vue-best-practices, vue-options-api-best-practices, vue-router-best-practices, vue-pinia-best-practices, vue-test-best-practices) — don't pick just one.
+- For Nuxt UI, always use the `nuxt-ui` skill.
+- For Go, always use the `golang-pro` skill.
 
 ## Using GitHub
 For questions about GitHub, use the gh tool
