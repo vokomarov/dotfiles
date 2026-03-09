@@ -33,19 +33,19 @@ Skills are managed via `config/claude/skills-manifest.json` and the `config/clau
 ### Update all skills
 
 ```bash
-python3 ~/.dotfiles/config/claude/update-skills
+php ~/.dotfiles/config/claude/update-skills
 ```
 
 ### Update specific skills
 
 ```bash
-python3 ~/.dotfiles/config/claude/update-skills vue-best-practices typefully
+php ~/.dotfiles/config/claude/update-skills vue-best-practices typefully
 ```
 
 ### List all skills and their sources
 
 ```bash
-python3 ~/.dotfiles/config/claude/update-skills --list
+php ~/.dotfiles/config/claude/update-skills --list
 ```
 
 ### Install a new skill
@@ -54,16 +54,16 @@ The script clones the skill, detects its name from `SKILL.md`, copies it into th
 
 ```bash
 # Skill is the whole repo
-python3 ~/.dotfiles/config/claude/update-skills install https://github.com/user/my-skill
+php ~/.dotfiles/config/claude/update-skills install https://github.com/user/my-skill
 
 # Skill lives in a subdirectory of a larger repo
-python3 ~/.dotfiles/config/claude/update-skills install https://github.com/org/skills-repo --subdir skills/my-skill
+php ~/.dotfiles/config/claude/update-skills install https://github.com/org/skills-repo --subdir skills/my-skill
 
 # Pin to a specific branch, tag, or commit
-python3 ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo --subdir skills/my-skill --ref v2.0.0
+php ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo --subdir skills/my-skill --ref v2.0.0
 
 # Override the local name (when upstream name differs)
-python3 ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo --subdir path/to/skill --name my-local-name
+php ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo --subdir path/to/skill --name my-local-name
 ```
 
 ### Sync manually added skills
@@ -71,7 +71,7 @@ python3 ~/.dotfiles/config/claude/update-skills install https://github.com/org/r
 If you copied a skill directory manually, run `sync` to register any untracked directories into the manifest. They will be added with `status: unknown` — edit the manifest to set their git source.
 
 ```bash
-python3 ~/.dotfiles/config/claude/update-skills sync
+php ~/.dotfiles/config/claude/update-skills sync
 ```
 
 Skills are also updated automatically when running the main `./update` script.
