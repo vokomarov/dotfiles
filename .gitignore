@@ -1,2 +1,4 @@
 shell/.yarnrc
 .dotfiles.code-workspace
+__pycache__/
+*.pyc
