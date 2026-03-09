@@ -1,305 +1,349 @@
-#!/usr/bin/env python3
-"""
-Manage Claude skills from their source repositories.
+#!/usr/bin/env php
+<?php
+/**
+ * Manage Claude skills from their source repositories.
+ *
+ * Usage:
+ *   ./update-skills                          # update all tracked skills
+ *   ./update-skills <name> ...               # update specific skills by name
+ *   ./update-skills --list                   # list all skills and their status
+ *   ./update-skills install <git-url>        # install new skill and add to manifest
+ *     [--subdir <path>]                      #   subdirectory within the repo
+ *     [--ref <branch|tag|sha>]               #   git ref (default: main)
+ *     [--name <override>]                    #   override local skill name
+ *   ./update-skills sync                     # add untracked skill dirs to manifest
+ */
 
-Usage:
-  ./update-skills                          # update all tracked skills
-  ./update-skills <name> ...               # update specific skills by name
-  ./update-skills --list                   # list all skills and their status
-  ./update-skills install <git-url>        # install new skill and add to manifest
-    [--subdir <path>]                      #   subdirectory within the repo
-    [--ref <branch|tag|sha>]               #   git ref (default: main)
-    [--name <override>]                    #   override local skill name
-  ./update-skills sync                     # add untracked skill dirs to manifest
-"""
+const BLUE   = "\033[0;34m";
+const GREEN  = "\033[0;32m";
+const YELLOW = "\033[1;33m";
+const RED    = "\033[0;31m";
+const RESET  = "\033[0m";
+const BOLD   = "\033[1m";
 
-import json
-import re
-import shutil
-import subprocess
-import sys
-import tempfile
-from pathlib import Path
+$scriptDir = dirname(__FILE__);
+$manifest  = $scriptDir . '/skills-manifest.json';
+$skillsDir = $scriptDir . '/skills';
 
-SCRIPT_DIR = Path(__file__).parent
-MANIFEST = SCRIPT_DIR / "skills-manifest.json"
-SKILLS_DIR = SCRIPT_DIR / "skills"
+// ── helpers ───────────────────────────────────────────────────────────────────
 
-BLUE = "\033[0;34m"
-GREEN = "\033[0;32m"
-YELLOW = "\033[1;33m"
-RED = "\033[0;31m"
-RESET = "\033[0m"
-BOLD = "\033[1m"
+function step(string $msg): void   { echo "  " . BLUE   . "➜" . RESET . " $msg\n"; }
+function success(string $msg): void { echo "  " . GREEN  . "✓" . RESET . " $msg\n"; }
+function warn(string $msg): void   { echo "  " . YELLOW . "⚠" . RESET . " $msg\n"; }
+function error(string $msg): void  { fwrite(STDERR, "  " . RED . "✗" . RESET . " $msg\n"); }
 
-
-def step(msg):
-    print(f"  {BLUE}➜{RESET} {msg}")
-
-
-def success(msg):
-    print(f"  {GREEN}✓{RESET} {msg}")
-
-
-def warn(msg):
-    print(f"  {YELLOW}⚠{RESET} {msg}")
-
-
-def error(msg):
-    print(f"  {RED}✗{RESET} {msg}", file=sys.stderr)
-
-
-def run(*cmd, cwd=None):
-    result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
-    if result.returncode != 0:
-        raise RuntimeError(result.stderr.strip() or f"Command failed: {' '.join(cmd)}")
-    return result
-
-
-def is_sha(ref):
-    return len(ref) >= 7 and all(c in "0123456789abcdefABCDEF" for c in ref)
-
-
-def read_skill_name(skill_dir):
-    """Read the name: field from SKILL.md frontmatter, or None if not found."""
-    skill_md = skill_dir / "SKILL.md"
-    if not skill_md.exists():
-        return None
-    content = skill_md.read_text()
-    m = re.search(r"^name:\s*(.+)$", content, re.MULTILINE)
-    return m.group(1).strip() if m else None
-
-
-def clone_repo(url, ref, subdir, dest):
-    """Clone repo (or sparse-checkout subdir) into dest. Returns the source path."""
-    if subdir:
-        clone_args = ["git", "clone", "--filter=blob:none", "--sparse", "--no-checkout"]
-        if not is_sha(ref):
-            clone_args += ["--branch", ref, "--depth", "1"]
-        clone_args += [url, str(dest)]
-        run(*clone_args)
-        run("git", "sparse-checkout", "set", "--cone", subdir, cwd=dest)
-        run("git", "checkout", ref, cwd=dest)
-        return dest / subdir
-    else:
-        clone_args = ["git", "clone", "--depth", "1"]
-        if not is_sha(ref):
-            clone_args += ["--branch", ref]
-        clone_args += [url, str(dest)]
-        run(*clone_args)
-        if is_sha(ref):
-            run("git", "checkout", ref, cwd=dest)
-        return dest
-
-
-def copy_skill(src, name):
-    """Copy cloned skill source into the skills directory."""
-    dst = SKILLS_DIR / name
-    if dst.exists():
-        shutil.rmtree(dst)
-    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"))
-
-
-def save_manifest(manifest):
-    manifest["skills"].sort(key=lambda s: s["name"])
-    MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n")
-
-
-# ── commands ──────────────────────────────────────────────────────────────────
-
-def cmd_list(manifest):
-    skills = manifest["skills"]
-    tracked = [s for s in skills if s.get("git")]
-    unknown = [s for s in skills if not s.get("git")]
-
-    print(f"\n{BOLD}Tracked skills ({len(tracked)}):{RESET}")
-    for s in sorted(tracked, key=lambda x: x["name"]):
-        subdir = f" [{s['subdir']}]" if s.get("subdir") else ""
-        ref = s.get("ref", "main")
-        print(f"  {GREEN}✓{RESET} {s['name']:40s} {s['git']}{subdir} @ {ref}")
-
-    print(f"\n{BOLD}Unknown source ({len(unknown)}):{RESET}")
-    for s in sorted(unknown, key=lambda x: x["name"]):
-        notes = f" — {s['notes']}" if s.get("notes") else ""
-        print(f"  {YELLOW}?{RESET} {s['name']}{notes}")
-    print()
-
-
-def cmd_update(manifest, names):
-    SKILLS_DIR.mkdir(exist_ok=True)
-
-    skills = manifest["skills"]
-    if names:
-        known = {s["name"] for s in skills}
-        for name in names - known:
-            error(f"{name}: not in manifest")
-        skills = [s for s in skills if s["name"] in names]
-
-    counts = {"ok": 0, "skipped": 0, "failed": 0}
-    print(f"\n{BOLD}Updating Claude skills{RESET}\n")
-
-    with tempfile.TemporaryDirectory(prefix="claude-skills-") as tmp:
-        for skill in skills:
-            name = skill["name"]
-            url = skill.get("git")
-            if not url:
-                warn(f"{name}: no git source, skipping")
-                counts["skipped"] += 1
-                continue
-
-            ref = skill.get("ref", "main")
-            subdir = skill.get("subdir") or ""
-            location = url + (f" [{subdir}]" if subdir else "") + f" @ {ref}"
-            step(f"{name}  {BLUE}{location}{RESET}")
-
-            try:
-                src = clone_repo(url, ref, subdir, Path(tmp) / name)
-                copy_skill(src, name)
-                success(name)
-                counts["ok"] += 1
-            except Exception as e:
-                error(f"{name}: {e}")
-                counts["failed"] += 1
-
-    ok, skip, fail = counts["ok"], counts["skipped"], counts["failed"]
-    print(f"\n  {GREEN}{ok} updated{RESET}, {YELLOW}{skip} skipped{RESET}, {RED}{fail} failed{RESET}\n")
-    if counts["failed"] > 0:
-        sys.exit(1)
-
-
-def cmd_install(manifest, url, subdir, ref, name_override):
-    """Clone a skill from a git URL, detect its name, copy it, and add to manifest."""
-    SKILLS_DIR.mkdir(exist_ok=True)
-    known = {s["name"] for s in manifest["skills"]}
-
-    print(f"\n{BOLD}Installing skill{RESET}\n")
-    step(f"Cloning {url}" + (f" [{subdir}]" if subdir else "") + f" @ {ref}")
-
-    with tempfile.TemporaryDirectory(prefix="claude-skills-") as tmp:
-        dest = Path(tmp) / "_install"
-        try:
-            src = clone_repo(url, ref, subdir or "", dest)
-        except Exception as e:
-            error(f"Clone failed: {e}")
-            sys.exit(1)
-
-        # Determine skill name
-        name = name_override or read_skill_name(src) or (
-            Path(subdir).name if subdir else url.rstrip("/").split("/")[-1]
-        )
-
-        if name in known:
-            warn(f"'{name}' already in manifest — updating entry and re-downloading")
-
-        step(f"Installing as '{name}'")
-        copy_skill(src, name)
-
-    # Update manifest
-    entry = {
-        "name": name,
-        "git": url,
-        "subdir": subdir or None,
-        "ref": ref,
-        "status": "tracked",
+function run(array $cmd, ?string $cwd = null): string
+{
+    $command = implode(' ', array_map('escapeshellarg', $cmd));
+    if ($cwd) {
+        $command = "cd " . escapeshellarg($cwd) . " && " . $command;
     }
-    manifest["skills"] = [s for s in manifest["skills"] if s["name"] != name]
-    manifest["skills"].append(entry)
-    save_manifest(manifest)
+    exec($command . ' 2>&1', $output, $code);
+    if ($code !== 0) {
+        throw new RuntimeException(implode("\n", $output) ?: "Command failed: $command");
+    }
+    return implode("\n", $output);
+}
 
-    success(f"Installed '{name}' and added to manifest")
-    print()
+function isSha(string $ref): bool
+{
+    return strlen($ref) >= 7 && ctype_xdigit($ref);
+}
 
+function readSkillName(string $skillDir): ?string
+{
+    $skillMd = $skillDir . '/SKILL.md';
+    if (!file_exists($skillMd)) {
+        return null;
+    }
+    if (preg_match('/^name:\s*(.+)$/m', file_get_contents($skillMd), $m)) {
+        return trim($m[1]);
+    }
+    return null;
+}
 
-def cmd_sync(manifest):
-    """Find skill dirs not in the manifest and register them with unknown status."""
-    if not SKILLS_DIR.exists():
-        warn("Skills directory does not exist")
-        return
+function cloneRepo(string $url, string $ref, ?string $subdir, string $dest): string
+{
+    if ($subdir) {
+        $args = ['git', 'clone', '--filter=blob:none', '--sparse', '--no-checkout'];
+        if (!isSha($ref)) {
+            array_push($args, '--branch', $ref, '--depth', '1');
+        }
+        array_push($args, $url, $dest);
+        run($args);
+        run(['git', 'sparse-checkout', 'set', '--cone', $subdir], $dest);
+        run(['git', 'checkout', $ref], $dest);
+        return $dest . '/' . $subdir;
+    }
 
-    known = {s["name"] for s in manifest["skills"]}
-    untracked = sorted(
-        d.name for d in SKILLS_DIR.iterdir()
-        if d.is_dir() and d.name not in known
-    )
+    $args = ['git', 'clone', '--depth', '1'];
+    if (!isSha($ref)) {
+        array_push($args, '--branch', $ref);
+    }
+    array_push($args, $url, $dest);
+    run($args);
+    if (isSha($ref)) {
+        run(['git', 'checkout', $ref], $dest);
+    }
+    return $dest;
+}
 
-    if not untracked:
-        success("All skill directories are already in the manifest")
-        return
+function copySkill(string $src, string $name, string $skillsDir): void
+{
+    $dst = $skillsDir . '/' . $name;
+    if (is_dir($dst)) {
+        run(['rm', '-rf', $dst]);
+    }
+    run(['rsync', '-a', '--exclude=.git', '--exclude=__pycache__', '--exclude=*.pyc', $src . '/', $dst]);
+}
 
-    print(f"\n{BOLD}Untracked skill directories ({len(untracked)}):{RESET}\n")
-    added = []
-    for name in untracked:
-        skill_name = read_skill_name(SKILLS_DIR / name) or name
-        if skill_name != name:
-            print(f"  {YELLOW}+{RESET} {name}  (SKILL.md name: {skill_name})")
-        else:
-            print(f"  {YELLOW}+{RESET} {name}")
-        manifest["skills"].append({
-            "name": name,
-            "git": None,
-            "status": "unknown",
-            "notes": "added by sync; set git source manually",
-        })
-        added.append(name)
+function loadManifest(string $path): array
+{
+    if (!file_exists($path)) {
+        error("Manifest not found: $path");
+        exit(1);
+    }
+    return json_decode(file_get_contents($path), true);
+}
 
-    save_manifest(manifest)
-    print(f"\n  Added {len(added)} entr{'y' if len(added) == 1 else 'ies'} to manifest with status 'unknown'.")
-    print(f"  Edit {MANIFEST} to set git sources.\n")
+function saveManifest(array $manifest, string $path): void
+{
+    usort($manifest['skills'], fn($a, $b) => $a['name'] <=> $b['name']);
+    file_put_contents($path, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
+}
 
+function tmpDir(): string
+{
+    $dir = sys_get_temp_dir() . '/claude-skills-' . uniqid();
+    mkdir($dir, 0700, true);
+    return $dir;
+}
 
-# ── entry point ───────────────────────────────────────────────────────────────
+function removeTmpDir(string $dir): void
+{
+    if (is_dir($dir)) {
+        run(['rm', '-rf', $dir]);
+    }
+}
 
-def main():
-    if not MANIFEST.exists():
-        error(f"Manifest not found: {MANIFEST}")
-        sys.exit(1)
+// ── commands ──────────────────────────────────────────────────────────────────
 
-    manifest = json.loads(MANIFEST.read_text())
-    args = sys.argv[1:]
+function cmdList(array $manifest): void
+{
+    $tracked = array_filter($manifest['skills'], fn($s) => !empty($s['git']));
+    $unknown = array_filter($manifest['skills'], fn($s) => empty($s['git']));
 
-    if not args or args == ["--list"]:
-        if args == ["--list"]:
-            cmd_list(manifest)
-        else:
-            cmd_update(manifest, set())
-        return
+    usort($tracked, fn($a, $b) => $a['name'] <=> $b['name']);
+    usort($unknown, fn($a, $b) => $a['name'] <=> $b['name']);
 
-    if args[0] == "--list":
-        cmd_list(manifest)
-        return
+    echo "\n" . BOLD . "Tracked skills (" . count($tracked) . "):" . RESET . "\n";
+    foreach ($tracked as $s) {
+        $subdir = !empty($s['subdir']) ? " [{$s['subdir']}]" : '';
+        $ref    = $s['ref'] ?? 'main';
+        printf("  " . GREEN . "✓" . RESET . " %-40s %s%s @ %s\n", $s['name'], $s['git'], $subdir, $ref);
+    }
 
-    if args[0] == "sync":
-        cmd_sync(manifest)
-        return
+    echo "\n" . BOLD . "Unknown source (" . count($unknown) . "):" . RESET . "\n";
+    foreach ($unknown as $s) {
+        $notes = !empty($s['notes']) ? " — {$s['notes']}" : '';
+        echo "  " . YELLOW . "?" . RESET . " {$s['name']}$notes\n";
+    }
+    echo "\n";
+}
 
-    if args[0] == "install":
-        rest = args[1:]
-        if not rest or rest[0].startswith("--"):
-            error("Usage: update-skills install <git-url> [--subdir <path>] [--ref <ref>] [--name <name>]")
-            sys.exit(1)
+function cmdUpdate(array $manifest, string $manifestPath, array $names, string $skillsDir): void
+{
+    if (!is_dir($skillsDir)) {
+        mkdir($skillsDir, 0755, true);
+    }
 
-        url = rest[0]
-        rest = rest[1:]
+    $skills = $manifest['skills'];
+    if ($names) {
+        $known = array_column($skills, 'name');
+        foreach (array_diff($names, $known) as $n) {
+            error("$n: not in manifest");
+        }
+        $skills = array_filter($skills, fn($s) => in_array($s['name'], $names));
+    }
 
-        subdir = ref = name_override = None
-        i = 0
-        while i < len(rest):
-            if rest[i] == "--subdir" and i + 1 < len(rest):
-                subdir = rest[i + 1]; i += 2
-            elif rest[i] == "--ref" and i + 1 < len(rest):
-                ref = rest[i + 1]; i += 2
-            elif rest[i] == "--name" and i + 1 < len(rest):
-                name_override = rest[i + 1]; i += 2
-            else:
-                error(f"Unknown argument: {rest[i]}")
-                sys.exit(1)
+    $ok = $skipped = $failed = 0;
+    echo "\n" . BOLD . "Updating Claude skills" . RESET . "\n\n";
 
-        cmd_install(manifest, url, subdir, ref or "main", name_override)
-        return
+    $tmp = tmpDir();
+    try {
+        foreach ($skills as $skill) {
+            $name = $skill['name'];
+            $url  = $skill['git'] ?? null;
 
-    # Positional args = skill names to update
-    cmd_update(manifest, set(args))
+            if (!$url) {
+                warn("$name: no git source, skipping");
+                $skipped++;
+                continue;
+            }
 
+            $ref    = $skill['ref'] ?? 'main';
+            $subdir = $skill['subdir'] ?? null;
+            $loc    = $url . ($subdir ? " [$subdir]" : '') . " @ $ref";
+            step("$name  " . BLUE . $loc . RESET);
 
-if __name__ == "__main__":
-    main()
+            try {
+                $src = cloneRepo($url, $ref, $subdir, $tmp . '/' . $name);
+                copySkill($src, $name, $skillsDir);
+                success($name);
+                $ok++;
+            } catch (RuntimeException $e) {
+                error("$name: " . $e->getMessage());
+                $failed++;
+            }
+        }
+    } finally {
+        removeTmpDir($tmp);
+    }
+
+    echo "\n  " . GREEN . "$ok updated" . RESET . ", " . YELLOW . "$skipped skipped" . RESET . ", " . RED . "$failed failed" . RESET . "\n\n";
+
+    if ($failed > 0) {
+        exit(1);
+    }
+}
+
+function cmdInstall(array $manifest, string $manifestPath, string $url, ?string $subdir, string $ref, ?string $nameOverride, string $skillsDir): void
+{
+    if (!is_dir($skillsDir)) {
+        mkdir($skillsDir, 0755, true);
+    }
+
+    $known = array_column($manifest['skills'], 'name');
+
+    echo "\n" . BOLD . "Installing skill" . RESET . "\n\n";
+    step("Cloning $url" . ($subdir ? " [$subdir]" : '') . " @ $ref");
+
+    $tmp = tmpDir();
+    try {
+        $dest = $tmp . '/_install';
+        try {
+            $src = cloneRepo($url, $ref, $subdir, $dest);
+        } catch (RuntimeException $e) {
+            error("Clone failed: " . $e->getMessage());
+            exit(1);
+        }
+
+        $name = $nameOverride
+            ?? readSkillName($src)
+            ?? ($subdir ? basename($subdir) : basename(rtrim($url, '/')));
+
+        if (in_array($name, $known)) {
+            warn("'$name' already in manifest — updating entry and re-downloading");
+        }
+
+        step("Installing as '$name'");
+        copySkill($src, $name, $skillsDir);
+    } finally {
+        removeTmpDir($tmp);
+    }
+
+    $manifest['skills'] = array_values(array_filter($manifest['skills'], fn($s) => $s['name'] !== $name));
+    $manifest['skills'][] = [
+        'name'   => $name,
+        'git'    => $url,
+        'subdir' => $subdir,
+        'ref'    => $ref,
+        'status' => 'tracked',
+    ];
+
+    saveManifest($manifest, $manifestPath);
+    success("Installed '$name' and added to manifest");
+    echo "\n";
+}
+
+function cmdSync(array $manifest, string $manifestPath, string $skillsDir): void
+{
+    if (!is_dir($skillsDir)) {
+        warn("Skills directory does not exist");
+        return;
+    }
+
+    $known     = array_column($manifest['skills'], 'name');
+    $dirs      = array_filter(scandir($skillsDir), fn($d) => $d !== '.' && $d !== '..' && is_dir($skillsDir . '/' . $d));
+    $untracked = array_values(array_filter($dirs, fn($d) => !in_array($d, $known)));
+    sort($untracked);
+
+    if (!$untracked) {
+        success("All skill directories are already in the manifest");
+        return;
+    }
+
+    echo "\n" . BOLD . "Untracked skill directories (" . count($untracked) . "):" . RESET . "\n\n";
+
+    foreach ($untracked as $dirName) {
+        $skillName = readSkillName($skillsDir . '/' . $dirName) ?? $dirName;
+        $hint      = $skillName !== $dirName ? "  (SKILL.md name: $skillName)" : '';
+        echo "  " . YELLOW . "+" . RESET . " $dirName$hint\n";
+
+        $manifest['skills'][] = [
+            'name'   => $dirName,
+            'git'    => null,
+            'status' => 'unknown',
+            'notes'  => 'added by sync; set git source manually',
+        ];
+    }
+
+    saveManifest($manifest, $manifestPath);
+    $count = count($untracked);
+    $entry = $count === 1 ? 'entry' : 'entries';
+    echo "\n  Added $count $entry to manifest with status 'unknown'.\n";
+    echo "  Edit $manifestPath to set git sources.\n\n";
+}
+
+// ── entry point ───────────────────────────────────────────────────────────────
+
+$args     = array_slice($argv, 1);
+$data     = loadManifest($manifest);
+
+if (!$args || $args === ['--list']) {
+    if ($args === ['--list']) {
+        cmdList($data);
+    } else {
+        cmdUpdate($data, $manifest, [], $skillsDir);
+    }
+    exit(0);
+}
+
+if ($args[0] === '--list') {
+    cmdList($data);
+    exit(0);
+}
+
+if ($args[0] === 'sync') {
+    cmdSync($data, $manifest, $skillsDir);
+    exit(0);
+}
+
+if ($args[0] === 'install') {
+    $rest = array_slice($args, 1);
+    if (!$rest || str_starts_with($rest[0], '--')) {
+        error("Usage: update-skills install <git-url> [--subdir <path>] [--ref <ref>] [--name <name>]");
+        exit(1);
+    }
+
+    $url    = array_shift($rest);
+    $subdir = $ref = $nameOverride = null;
+
+    for ($i = 0; $i < count($rest); $i++) {
+        match ($rest[$i]) {
+            '--subdir' => $subdir      = $rest[++$i],
+            '--ref'    => $ref         = $rest[++$i],
+            '--name'   => $nameOverride = $rest[++$i],
+            default    => (function () use ($rest, $i) {
+                error("Unknown argument: {$rest[$i]}");
+                exit(1);
+            })(),
+        };
+    }
+
+    cmdInstall($data, $manifest, $url, $subdir, $ref ?? 'main', $nameOverride, $skillsDir);
+    exit(0);
+}
+
+// Positional args = skill names to update
+cmdUpdate($data, $manifest, $args, $skillsDir);
