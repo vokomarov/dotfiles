@@ -7,6 +7,7 @@
  *   ./update-skills                          # update all tracked skills
  *   ./update-skills <name> ...               # update specific skills by name
  *   ./update-skills --list                   # list all skills and their status
+ *   ./update-skills outdated                 # list skills with newer upstream versions
  *   ./update-skills install <git-url>        # install new skill and add to manifest
  *     [--subdir <path>]                      #   subdirectory within the repo
  *     [--ref <branch|tag|sha>]               #   git ref (default: main)
@@ -27,10 +28,10 @@ $skillsDir = $scriptDir . '/skills';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
-function step(string $msg): void   { echo "  " . BLUE   . "➜" . RESET . " $msg\n"; }
+function step(string $msg): void    { echo "  " . BLUE   . "➜" . RESET . " $msg\n"; }
 function success(string $msg): void { echo "  " . GREEN  . "✓" . RESET . " $msg\n"; }
-function warn(string $msg): void   { echo "  " . YELLOW . "⚠" . RESET . " $msg\n"; }
-function error(string $msg): void  { fwrite(STDERR, "  " . RED . "✗" . RESET . " $msg\n"); }
+function warn(string $msg): void    { echo "  " . YELLOW . "⚠" . RESET . " $msg\n"; }
+function error(string $msg): void   { fwrite(STDERR, "  " . RED . "✗" . RESET . " $msg\n"); }
 
 function run(array $cmd, ?string $cwd = null): string
 {
@@ -62,7 +63,11 @@ function readSkillName(string $skillDir): ?string
     return null;
 }
 
-function cloneRepo(string $url, string $ref, ?string $subdir, string $dest): string
+/**
+ * Clone repo (with optional sparse subdir) into $dest.
+ * Returns ['src' => string, 'sha' => string].
+ */
+function cloneRepo(string $url, string $ref, ?string $subdir, string $dest): array
 {
     if ($subdir) {
         $args = ['git', 'clone', '--filter=blob:none', '--sparse', '--no-checkout'];
@@ -73,7 +78,8 @@ function cloneRepo(string $url, string $ref, ?string $subdir, string $dest): str
         run($args);
         run(['git', 'sparse-checkout', 'set', '--cone', $subdir], $dest);
         run(['git', 'checkout', $ref], $dest);
-        return $dest . '/' . $subdir;
+        $sha = trim(run(['git', 'rev-parse', 'HEAD'], $dest));
+        return ['src' => $dest . '/' . $subdir, 'sha' => $sha];
     }
 
     $args = ['git', 'clone', '--depth', '1'];
@@ -85,7 +91,29 @@ function cloneRepo(string $url, string $ref, ?string $subdir, string $dest): str
     if (isSha($ref)) {
         run(['git', 'checkout', $ref], $dest);
     }
-    return $dest;
+    $sha = trim(run(['git', 'rev-parse', 'HEAD'], $dest));
+    return ['src' => $dest, 'sha' => $sha];
+}
+
+/**
+ * Fetch the current HEAD SHA of a remote ref without cloning.
+ * Returns null if the ref cannot be resolved (e.g. already a pinned SHA).
+ */
+function remoteHeadSha(string $url, string $ref): ?string
+{
+    if (isSha($ref)) {
+        return null; // pinned SHA — skip check
+    }
+
+    foreach (["refs/heads/$ref", "refs/tags/$ref"] as $fullRef) {
+        $output = [];
+        exec('git ls-remote ' . escapeshellarg($url) . ' ' . escapeshellarg($fullRef) . ' 2>/dev/null', $output, $code);
+        if ($code === 0 && !empty($output[0])) {
+            return explode("\t", trim($output[0]))[0];
+        }
+    }
+
+    return null;
 }
 
 function copySkill(string $src, string $name, string $skillsDir): void
@@ -151,7 +179,7 @@ function cmdList(array $manifest): void
     echo "\n";
 }
 
-function cmdUpdate(array $manifest, string $manifestPath, array $names, string $skillsDir): void
+function cmdUpdate(array &$manifest, string $manifestPath, array $names, string $skillsDir): void
 {
     if (!is_dir($skillsDir)) {
         mkdir($skillsDir, 0755, true);
@@ -191,9 +219,19 @@ function cmdUpdate(array $manifest, string $manifestPath, array $names, string $
             step("$name  " . BLUE . $loc . RESET);
 
             try {
-                $src = cloneRepo($url, $ref, $subdir, $tmp . '/' . $name);
-                copySkill($src, $name, $skillsDir);
-                success($name);
+                $result = cloneRepo($url, $ref, $subdir, $tmp . '/' . $name);
+                copySkill($result['src'], $name, $skillsDir);
+
+                // Persist installed SHA into manifest
+                foreach ($manifest['skills'] as &$entry) {
+                    if ($entry['name'] === $name) {
+                        $entry['installed_sha'] = $result['sha'];
+                        break;
+                    }
+                }
+                unset($entry);
+
+                success("$name  " . BLUE . substr($result['sha'], 0, 7) . RESET);
                 $ok++;
             } catch (RuntimeException $e) {
                 error("$name: " . $e->getMessage());
@@ -204,6 +242,8 @@ function cmdUpdate(array $manifest, string $manifestPath, array $names, string $
         removeTmpDir($tmp);
     }
 
+    saveManifest($manifest, $manifestPath);
+
     echo "\n  " . GREEN . "$ok updated" . RESET . ", " . YELLOW . "$skipped skipped" . RESET . ", " . RED . "$failed failed" . RESET . "\n\n";
 
     if ($failed > 0) {
@@ -211,7 +251,95 @@ function cmdUpdate(array $manifest, string $manifestPath, array $names, string $
     }
 }
 
-function cmdInstall(array $manifest, string $manifestPath, string $url, ?string $subdir, string $ref, ?string $nameOverride, string $skillsDir): void
+function cmdOutdated(array $manifest): void
+{
+    $tracked = array_filter($manifest['skills'], fn($s) => !empty($s['git']));
+
+    echo "\n" . BOLD . "Checking for updates..." . RESET . "\n\n";
+
+    $outdated   = [];
+    $untracked  = [];
+    $upToDate   = 0;
+    $failed     = 0;
+
+    foreach ($tracked as $skill) {
+        $name = $skill['name'];
+        $url  = $skill['git'];
+        $ref  = $skill['ref'] ?? 'main';
+
+        if (isSha($ref)) {
+            $upToDate++;
+            continue; // pinned SHA — always considered current
+        }
+
+        echo "  " . BLUE . "➜" . RESET . " checking $name\r";
+
+        try {
+            $remoteSha = remoteHeadSha($url, $ref);
+        } catch (RuntimeException $e) {
+            error("$name: " . $e->getMessage());
+            $failed++;
+            continue;
+        }
+
+        if ($remoteSha === null) {
+            $upToDate++;
+            continue;
+        }
+
+        $installedSha = $skill['installed_sha'] ?? null;
+
+        if ($installedSha === null) {
+            $untracked[] = ['skill' => $skill, 'remote' => $remoteSha];
+        } elseif ($remoteSha !== $installedSha) {
+            $outdated[] = ['skill' => $skill, 'remote' => $remoteSha];
+        } else {
+            $upToDate++;
+        }
+    }
+
+    echo str_repeat(' ', 60) . "\r"; // clear progress line
+
+    if (!$outdated && !$untracked) {
+        success("All skills are up to date");
+        echo "\n";
+        return;
+    }
+
+    if ($outdated) {
+        echo BOLD . "  Updates available (" . count($outdated) . "):" . RESET . "\n\n";
+        foreach ($outdated as ['skill' => $s, 'remote' => $remote]) {
+            $installed = substr($s['installed_sha'], 0, 7);
+            $latest    = substr($remote, 0, 7);
+            printf(
+                "  " . YELLOW . "↑" . RESET . " %-40s %s → %s\n",
+                $s['name'],
+                BLUE . $installed . RESET,
+                GREEN . $latest . RESET
+            );
+        }
+        echo "\n";
+    }
+
+    if ($untracked) {
+        echo BOLD . "  No installed SHA recorded (" . count($untracked) . "):" . RESET . "\n\n";
+        foreach ($untracked as ['skill' => $s, 'remote' => $remote]) {
+            printf(
+                "  " . YELLOW . "?" . RESET . " %-40s latest: %s  (run update to track)\n",
+                $s['name'],
+                BLUE . substr($remote, 0, 7) . RESET
+            );
+        }
+        echo "\n";
+    }
+
+    if ($outdated) {
+        $names = implode(' ', array_column(array_column($outdated, 'skill'), 'name'));
+        echo "  Run: " . BOLD . "update-skills $names" . RESET . "\n\n";
+    }
+}
+
+function cmdInstall(array &$manifest, string $manifestPath, string $url, ?string $subdir, string $ref, ?string $nameOverride, string $skillsDir): void
 {
     if (!is_dir($skillsDir)) {
         mkdir($skillsDir, 0755, true);
@@ -223,17 +351,18 @@ function cmdInstall(array $manifest, string $manifestPath, string $url, ?string 
     step("Cloning $url" . ($subdir ? " [$subdir]" : '') . " @ $ref");
 
     $tmp = tmpDir();
+    $name = null;
     try {
         $dest = $tmp . '/_install';
         try {
-            $src = cloneRepo($url, $ref, $subdir, $dest);
+            $result = cloneRepo($url, $ref, $subdir, $dest);
         } catch (RuntimeException $e) {
             error("Clone failed: " . $e->getMessage());
             exit(1);
         }
 
         $name = $nameOverride
-            ?? readSkillName($src)
+            ?? readSkillName($result['src'])
             ?? ($subdir ? basename($subdir) : basename(rtrim($url, '/')));
 
         if (in_array($name, $known)) {
@@ -241,26 +370,27 @@ function cmdInstall(array $manifest, string $manifestPath, string $url, ?string 
         }
 
         step("Installing as '$name'");
-        copySkill($src, $name, $skillsDir);
+        copySkill($result['src'], $name, $skillsDir);
     } finally {
         removeTmpDir($tmp);
     }
 
     $manifest['skills'] = array_values(array_filter($manifest['skills'], fn($s) => $s['name'] !== $name));
     $manifest['skills'][] = [
-        'name'   => $name,
-        'git'    => $url,
-        'subdir' => $subdir,
-        'ref'    => $ref,
-        'status' => 'tracked',
+        'name'          => $name,
+        'git'           => $url,
+        'subdir'        => $subdir,
+        'ref'           => $ref,
+        'status'        => 'tracked',
+        'installed_sha' => $result['sha'],
     ];
 
     saveManifest($manifest, $manifestPath);
-    success("Installed '$name' and added to manifest");
+    success("Installed '$name' (" . substr($result['sha'], 0, 7) . ") and added to manifest");
     echo "\n";
 }
 
-function cmdSync(array $manifest, string $manifestPath, string $skillsDir): void
+function cmdSync(array &$manifest, string $manifestPath, string $skillsDir): void
 {
     if (!is_dir($skillsDir)) {
         warn("Skills directory does not exist");
@@ -301,8 +431,8 @@ function cmdSync(array $manifest, string $manifestPath, string $skillsDir): void
 
 // ── entry point ───────────────────────────────────────────────────────────────
 
-$args     = array_slice($argv, 1);
-$data     = loadManifest($manifest);
+$args = array_slice($argv, 1);
+$data = loadManifest($manifest);
 
 if (!$args || $args === ['--list']) {
     if ($args === ['--list']) {
@@ -315,6 +445,11 @@ if (!$args || $args === ['--list']) {
 
 if ($args[0] === '--list') {
     cmdList($data);
+    exit(0);
+}
+
+if ($args[0] === 'outdated') {
+    cmdOutdated($data);
     exit(0);
 }
 
@@ -335,8 +470,8 @@ if ($args[0] === 'install') {
 
     for ($i = 0; $i < count($rest); $i++) {
         match ($rest[$i]) {
-            '--subdir' => $subdir      = $rest[++$i],
-            '--ref'    => $ref         = $rest[++$i],
+            '--subdir' => $subdir       = $rest[++$i],
+            '--ref'    => $ref          = $rest[++$i],
             '--name'   => $nameOverride = $rest[++$i],
             default    => (function () use ($rest, $i) {
                 error("Unknown argument: {$rest[$i]}");

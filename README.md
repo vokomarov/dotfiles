@@ -66,6 +66,14 @@ php ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo 
 php ~/.dotfiles/config/claude/update-skills install https://github.com/org/repo --subdir path/to/skill --name my-local-name
 ```
 
+### Check for newer upstream versions
+
+Shows only skills that have updates available. Skills without a recorded SHA (never updated via the script) are listed separately. Uses `git ls-remote` — no cloning required.
+
+```bash
+php ~/.dotfiles/config/claude/update-skills outdated
+```
+
 ### Sync manually added skills
 
 If you copied a skill directory manually, run `sync` to register any untracked directories into the manifest. They will be added with `status: unknown` — edit the manifest to set their git source.
