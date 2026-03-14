@@ -230,6 +230,14 @@
             "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
         },
         {
+            "name": "openapi-spec-generation",
+            "git": "https://github.com/wshobson/agents",
+            "subdir": "plugins/documentation-generation/skills/openapi-spec-generation",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "a6f0f457c4e41cbb0ad329b691d28e255a829210"
+        },
+        {
             "name": "page-cro",
             "git": "https://github.com/coreyhaines31/marketingskills",
             "subdir": "skills/page-cro",
