@@ -7,7 +7,7 @@
             "subdir": "skills/ab-test-setup",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "agent-browser",
@@ -15,7 +15,7 @@
             "subdir": "skills/agent-browser",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "94cd888ecbed5dc4a334513d1cd6f98d4e624ff0"
+            "installed_sha": "f8bc8b368a8a7e4793079e967c8624c5ab88c96f"
         },
         {
             "name": "analytics-tracking",
@@ -23,7 +23,7 @@
             "subdir": "skills/analytics-tracking",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "audit-website",
@@ -36,10 +36,10 @@
         {
             "name": "building-native-ui",
             "git": "https://github.com/expo/skills",
-            "subdir": "plugins/expo-app-design/skills/building-native-ui",
+            "subdir": "plugins/expo/skills/building-native-ui",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "991716e214d206384249322e9ef99a2fe059bb9b"
+            "installed_sha": "edc2afb4f32c0b645d14c91c37e89e651016722a"
         },
         {
             "name": "competitor-alternatives",
@@ -47,7 +47,7 @@
             "subdir": "skills/competitor-alternatives",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "content-strategy",
@@ -55,7 +55,7 @@
             "subdir": "skills/content-strategy",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "context7-auto-research",
@@ -64,7 +64,7 @@
             "ref": "main",
             "status": "tracked",
             "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
-            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
+            "installed_sha": "05d40bb02e5d753a95358739b08e1894327b9f65"
         },
         {
             "name": "convert-github-issue-to-discussion",
@@ -73,7 +73,7 @@
             "ref": "main",
             "status": "tracked",
             "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
-            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
+            "installed_sha": "05d40bb02e5d753a95358739b08e1894327b9f65"
         },
         {
             "name": "copy-editing",
@@ -81,7 +81,7 @@
             "subdir": "skills/copy-editing",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "copywriting",
@@ -89,7 +89,7 @@
             "subdir": "skills/copywriting",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "create-adaptable-composable",
@@ -97,7 +97,7 @@
             "subdir": "skills/create-adaptable-composable",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "database-optimizer",
@@ -105,7 +105,7 @@
             "subdir": "skills/database-optimizer",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "devops-engineer",
@@ -113,7 +113,7 @@
             "subdir": "skills/devops-engineer",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "email-sequence",
@@ -121,7 +121,7 @@
             "subdir": "skills/email-sequence",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "fix-github-issue",
@@ -130,7 +130,7 @@
             "ref": "main",
             "status": "tracked",
             "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
-            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
+            "installed_sha": "05d40bb02e5d753a95358739b08e1894327b9f65"
         },
         {
             "name": "form-cro",
@@ -138,7 +138,7 @@
             "subdir": "skills/form-cro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "free-tool-strategy",
@@ -146,7 +146,7 @@
             "subdir": "skills/free-tool-strategy",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "frontend-design",
@@ -154,7 +154,7 @@
             "subdir": "skills/frontend-design",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "b0cbd3df1533b396d281a6886d5132f623393a9c"
+            "installed_sha": "98669c11ca63e9c81c11501e1437e5c47b556621"
         },
         {
             "name": "golang-pro",
@@ -162,7 +162,7 @@
             "subdir": "skills/golang-pro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "ios-simulator-skill",
@@ -170,7 +170,7 @@
             "subdir": "ios-simulator-skill",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "96ff1fee9607f55fdc6c126eb5d06f29f6b4e7d9"
+            "installed_sha": "c9e021ed9dc2c5c1e302821f4b8034e38c42d178"
         },
         {
             "name": "kubernetes-specialist",
@@ -178,7 +178,7 @@
             "subdir": "skills/kubernetes-specialist",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "laravel-inertia-react-structure",
@@ -187,7 +187,7 @@
             "ref": "main",
             "status": "tracked",
             "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
-            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
+            "installed_sha": "05d40bb02e5d753a95358739b08e1894327b9f65"
         },
         {
             "name": "launch-strategy",
@@ -195,7 +195,7 @@
             "subdir": "skills/launch-strategy",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "marketing-ideas",
@@ -203,7 +203,7 @@
             "subdir": "skills/marketing-ideas",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "marketing-psychology",
@@ -211,7 +211,7 @@
             "subdir": "skills/marketing-psychology",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "nuxt-ui",
@@ -219,7 +219,7 @@
             "subdir": "skills/nuxt-ui",
             "ref": "v4",
             "status": "tracked",
-            "installed_sha": "91c6356e920e6288177e3795aa8ed56bc82907c0"
+            "installed_sha": "39665c9d467998e15927d5359c933b24701e7265"
         },
         {
             "name": "onboarding-cro",
@@ -227,7 +227,7 @@
             "subdir": "skills/onboarding-cro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "openapi-spec-generation",
@@ -235,7 +235,7 @@
             "subdir": "plugins/documentation-generation/skills/openapi-spec-generation",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "a6f0f457c4e41cbb0ad329b691d28e255a829210"
+            "installed_sha": "91fe43e152e96a55a264fc1afdf44cd4db2a38d4"
         },
         {
             "name": "page-cro",
@@ -243,7 +243,7 @@
             "subdir": "skills/page-cro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "paid-ads",
@@ -251,7 +251,7 @@
             "subdir": "skills/paid-ads",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "paywall-upgrade-cro",
@@ -259,7 +259,7 @@
             "subdir": "skills/paywall-upgrade-cro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "pdf",
@@ -268,7 +268,7 @@
             "ref": "main",
             "status": "tracked",
             "notes": "Anthropic proprietary license (not OSS)",
-            "installed_sha": "b0cbd3df1533b396d281a6886d5132f623393a9c"
+            "installed_sha": "98669c11ca63e9c81c11501e1437e5c47b556621"
         },
         {
             "name": "php-guidelines-from-spatie",
@@ -277,7 +277,7 @@
             "ref": "main",
             "status": "tracked",
             "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
-            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
+            "installed_sha": "05d40bb02e5d753a95358739b08e1894327b9f65"
         },
         {
             "name": "php-pro",
@@ -285,7 +285,7 @@
             "subdir": "skills/php-pro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "popup-cro",
@@ -293,7 +293,7 @@
             "subdir": "skills/popup-cro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "pricing-strategy",
@@ -301,7 +301,7 @@
             "subdir": "skills/pricing-strategy",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "product-marketing-context",
@@ -309,7 +309,7 @@
             "subdir": "skills/product-marketing-context",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "programmatic-seo",
@@ -317,7 +317,7 @@
             "subdir": "skills/programmatic-seo",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "referral-program",
@@ -325,7 +325,7 @@
             "subdir": "skills/referral-program",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "review-pr",
@@ -334,7 +334,7 @@
             "ref": "main",
             "status": "tracked",
             "notes": "no standalone upstream; sourced from freekmurze/dotfiles",
-            "installed_sha": "355d067c3c5ba1b6744d91f725ff15b759159806"
+            "installed_sha": "05d40bb02e5d753a95358739b08e1894327b9f65"
         },
         {
             "name": "schema-markup",
@@ -342,7 +342,7 @@
             "subdir": "skills/schema-markup",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "security-reviewer",
@@ -350,7 +350,7 @@
             "subdir": "skills/security-reviewer",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "seo-audit",
@@ -358,7 +358,7 @@
             "subdir": "skills/seo-audit",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "signup-flow-cro",
@@ -366,7 +366,7 @@
             "subdir": "skills/signup-flow-cro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "social-content",
@@ -374,7 +374,7 @@
             "subdir": "skills/social-content",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "2f5db8d95cff07fcc67d6f2be7fb0a677bf897e6"
+            "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
             "name": "sql-pro",
@@ -382,7 +382,7 @@
             "subdir": "skills/sql-pro",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "sre-engineer",
@@ -390,7 +390,7 @@
             "subdir": "skills/sre-engineer",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "tailwind-design-system",
@@ -398,7 +398,7 @@
             "subdir": "plugins/frontend-mobile-development/skills/tailwind-design-system",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "a6f0f457c4e41cbb0ad329b691d28e255a829210"
+            "installed_sha": "91fe43e152e96a55a264fc1afdf44cd4db2a38d4"
         },
         {
             "name": "terraform-engineer",
@@ -406,7 +406,7 @@
             "subdir": "skills/terraform-engineer",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "the-fool",
@@ -414,7 +414,7 @@
             "subdir": "skills/the-fool",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "3bf9a24b76a7c122f1fc05e83929fbc84e1c207a"
+            "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
             "name": "typefully",
@@ -422,7 +422,7 @@
             "subdir": "skills/typefully",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "98dcae28c434b9e01a18151674da239d99149dae"
+            "installed_sha": "a57a932b0116c599a30f028874be9904f0e880ca"
         },
         {
             "name": "vue-best-practices",
@@ -430,7 +430,7 @@
             "subdir": "skills/vue-best-practices",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "vue-debug-guides",
@@ -438,7 +438,7 @@
             "subdir": "skills/vue-debug-guides",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "vue-jsx-best-practices",
@@ -446,7 +446,7 @@
             "subdir": "skills/vue-jsx-best-practices",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "vue-options-api-best-practices",
@@ -454,7 +454,7 @@
             "subdir": "skills/vue-options-api-best-practices",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "vue-pinia-best-practices",
@@ -462,7 +462,7 @@
             "subdir": "skills/vue-pinia-best-practices",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "vue-router-best-practices",
@@ -470,7 +470,7 @@
             "subdir": "skills/vue-router-best-practices",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "vue-testing-best-practices",
@@ -478,7 +478,7 @@
             "subdir": "skills/vue-testing-best-practices",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "f3dd1bf4d3ac78331bdc903e4519d561c538ca6a"
+            "installed_sha": "c9d355ff23f654309dd02006be671859df0a134c"
         },
         {
             "name": "web-design-guidelines",
@@ -486,7 +486,7 @@
             "subdir": "skills/web-design-guidelines",
             "ref": "main",
             "status": "tracked",
-            "installed_sha": "64bee5b7ea30702448e2aed774eb361914029944"
+            "installed_sha": "6f3fa3191d089d7810e332a562ad2a0ff5f7f239"
         }
     ]
 }

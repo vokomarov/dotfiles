@@ -53,16 +53,37 @@
       "mcp__laravel-boost__*",
       "mcp__chrome-devtools__*"
     ],
+    "deny": [
+      "Read(**/.env*)"
+    ],
     "defaultMode": "acceptEdits"
   },
-  "enabledPlugins": {
-    "laravel-simplifier@laravel": true,
-    "agent-browser@agent-browser": true
-  },
-  "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
-  }
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "laravel-simplifier@laravel": true,
+    "agent-browser@agent-browser": true,
+    "code-review@claude-plugins-official": true,
+    "figma@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "laravel": {
+      "source": {
+        "source": "github",
+        "repo": "laravel/agent-skills"
+      }
+    },
+    "agent-browser": {
+      "source": {
+        "source": "github",
+        "repo": "vercel-labs/agent-browser"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }
