@@ -125,3 +125,5 @@ source /Users/vovan/.config/op/plugins.sh
 # doctl autocomplete
 # source <(doctl completion zsh)
 export PATH="$HOME/.local/bin:$PATH"
+
+export PATH="$HOME/go/bin:$PATH"
