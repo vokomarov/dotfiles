@@ -1,4 +1,31 @@
 {
+  "alwaysThinkingEnabled": true,
+  "autoUpdateChannel": "stable",
+  "enabledPlugins": {
+    "agent-browser@agent-browser": true,
+    "claude-md-management@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "laravel-simplifier@laravel": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "env": {
+    "CLAUDE_DISABLE_AUTO_UPDATES": "1"
+  },
+  "extraKnownMarketplaces": {
+    "agent-browser": {
+      "source": {
+        "repo": "vercel-labs/agent-browser",
+        "source": "github"
+      }
+    },
+    "laravel": {
+      "source": {
+        "repo": "laravel/agent-skills",
+        "source": "github"
+      }
+    }
+  },
   "permissions": {
     "allow": [
       "Skill(ray-skill:*)",
@@ -53,37 +80,14 @@
       "mcp__laravel-boost__*",
       "mcp__chrome-devtools__*"
     ],
+    "defaultMode": "acceptEdits",
     "deny": [
       "Read(**/.env*)"
-    ],
-    "defaultMode": "acceptEdits"
+    ]
   },
+  "skipDangerousModePermissionPrompt": true,
   "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
-  },
-  "enabledPlugins": {
-    "superpowers@claude-plugins-official": true,
-    "claude-md-management@claude-plugins-official": true,
-    "laravel-simplifier@laravel": true,
-    "agent-browser@agent-browser": true,
-    "code-review@claude-plugins-official": true,
-    "figma@claude-plugins-official": true
-  },
-  "extraKnownMarketplaces": {
-    "laravel": {
-      "source": {
-        "source": "github",
-        "repo": "laravel/agent-skills"
-      }
-    },
-    "agent-browser": {
-      "source": {
-        "source": "github",
-        "repo": "vercel-labs/agent-browser"
-      }
-    }
-  },
-  "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+    "command": "~/.claude/statusline.sh",
+    "type": "command"
+  }
 }
