@@ -26,13 +26,18 @@
       }
     }
   },
-  "mcpServers": {
-    "cc-approvals": {
-      "type": "sse",
-      "url": "http://localhost:9753/mcp/sse"
-    }
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/vovan/go/bin/claude-code-approvals hook",
+            "type": "command"
+          }
+        ]
+      }
+    ]
   },
-  "permissionPromptTool": "mcp__cc-approvals__request_permission",
   "permissions": {
     "allow": [
       "Skill(ray-skill:*)",

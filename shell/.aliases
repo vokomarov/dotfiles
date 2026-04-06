@@ -75,3 +75,6 @@ alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 # Claude skills management
 alias claude-skill='php ~/.dotfiles/config/claude/update-skills'
 
+# Claude Code Approvals
+alias cc='claude-code-approvals'
+
