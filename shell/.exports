@@ -28,3 +28,7 @@ export GOPATH=$HOME/go
 
 # Configure GPG
 export GPG_TTY=$(tty)
+
+export OLLAMA_HOST=0.0.0.0
+export OLLAMA_NUM_CTX=32768
+export OLLAMA_CONTEXT_LENGTH=131072

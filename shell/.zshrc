@@ -127,3 +127,6 @@ source /Users/vovan/.config/op/plugins.sh
 export PATH="$HOME/.local/bin:$PATH"
 
 export PATH="$HOME/go/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/vovan/.antigravity/antigravity/bin:$PATH"

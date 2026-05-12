@@ -108,6 +108,14 @@
             "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
         },
         {
+            "name": "design-taste-frontend",
+            "git": "https://github.com/Leonxlnx/taste-skill",
+            "subdir": "skills/taste-skill",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "035bf8d2c6518c01cc09acd52f9116672596b691"
+        },
+        {
             "name": "devops-engineer",
             "git": "https://github.com/Jeffallan/claude-skills",
             "subdir": "skills/devops-engineer",
@@ -122,6 +130,14 @@
             "ref": "main",
             "status": "tracked",
             "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
+        },
+        {
+            "name": "emil-design-eng",
+            "git": "https://github.com/emilkowalski/skill",
+            "subdir": "skills/emil-design-eng",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "ecf66bbd1fb33c25332b6b0e454d08049978284c"
         },
         {
             "name": "fix-github-issue",
@@ -171,6 +187,14 @@
             "ref": "main",
             "status": "tracked",
             "installed_sha": "c9e021ed9dc2c5c1e302821f4b8034e38c42d178"
+        },
+        {
+            "name": "karpathy-guidelines",
+            "git": "https://github.com/forrestchang/andrej-karpathy-skills",
+            "subdir": "skills/karpathy-guidelines",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "c9a44ae835fa2f5765a697216692705761a53f40"
         },
         {
             "name": "kubernetes-specialist",
@@ -320,6 +344,14 @@
             "installed_sha": "7c8c087486c29290b982820d719e1c4a556c0053"
         },
         {
+            "name": "redesign-existing-projects",
+            "git": "https://github.com/Leonxlnx/taste-skill",
+            "subdir": "skills/redesign-skill",
+            "ref": "main",
+            "status": "tracked",
+            "installed_sha": "035bf8d2c6518c01cc09acd52f9116672596b691"
+        },
+        {
             "name": "referral-program",
             "git": "https://github.com/coreyhaines31/marketingskills",
             "subdir": "skills/referral-program",
@@ -407,6 +439,14 @@
             "ref": "main",
             "status": "tracked",
             "installed_sha": "5b761018cebd430edcecbeeb46bdde6150d22c65"
+        },
+        {
+            "name": "terraform-skill",
+            "git": "https://github.com/antonbabenko/terraform-skill",
+            "subdir": null,
+            "ref": "master",
+            "status": "tracked",
+            "installed_sha": "5a68694c647526d95859f972bea3a2ae4e9cdfa7"
         },
         {
             "name": "the-fool",

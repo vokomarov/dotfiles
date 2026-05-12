@@ -30,6 +30,8 @@ else
     # Try Homebrew first (modern)
     if command -v brew &>/dev/null; then
         brew install --cask claude-code || warn "Claude Code installation failed"
+        brew install --cask rtk || warn "RTK installation failed"
+        rtk init -g || warn "RTK initialization failed"
     else
         # Fallback to curl installer
         warn "Homebrew not found, using curl installer"
@@ -58,6 +60,7 @@ if [ -d "$DOTFILES_DIR/config/claude" ]; then
     ln -sf "$DOTFILES_DIR/config/claude/laravel-php-guidelines.md" ~/.claude/laravel-php-guidelines.md
     ln -sf "$DOTFILES_DIR/config/claude/settings.json" ~/.claude/settings.json
     ln -sf "$DOTFILES_DIR/config/claude/statusline.sh" ~/.claude/statusline.sh
+    ln -sf "$DOTFILES_DIR/config/claude/statusline-2.sh" ~/.claude/statusline-2.sh
 
     # Symlink entire skills directory
     rm -rf ~/.claude/skills
@@ -68,6 +71,13 @@ if [ -d "$DOTFILES_DIR/config/claude" ]; then
     ln -sf "$DOTFILES_DIR/config/claude/agents" ~/.claude/agents
 
     success "Claude Code configured"
+
+    step "Setting up Open Code configuration"
+    mkdir -p ~/.config/opencode
+
+    # Symlink configuration files
+    ln -sf "$DOTFILES_DIR/config/opencode/opencode.json" ~/.config/opencode/opencode.json
+    ln -sf "$DOTFILES_DIR/config/opencode/oh-my-openagent.json" ~/.config/opencode/oh-my-openagent.json
 else
     warn "Dotfiles directory not found, skipping configuration"
     echo "  To set up configuration later, clone dotfiles to ~/.dotfiles"
