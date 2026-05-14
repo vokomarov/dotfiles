@@ -43,34 +43,29 @@ rate_color() {
   fi
 }
 
+# Color the context percentage based on usage
+if [ "$ctx_pct" -ge 60 ]; then
+  ctx_color='\033[01;31m' # red
+elif [ "$ctx_pct" -ge 40 ]; then
+  ctx_color='\033[01;33m' # yellow
+else
+  ctx_color='\033[01;32m' # green
+fi
+
+LIMITS=""
+if [ -n "$FIVE_H" ]; then
+  LIMITS="5h: $(rate_color "$FIVE_H")$(printf '%.0f' "$FIVE_H")%\033[00m$(time_left "$FIVE_H_RESET")"
+fi
+if [ -n "$WEEK" ]; then
+  LIMITS="${LIMITS:+$LIMITS }| 7d: $(rate_color "$WEEK")$(printf '%.0f' "$WEEK")%\033[00m$(time_left "$WEEK_RESET")"
+fi
+
 # Git information
 if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
-  # Get repo name (just the directory name)
   repo_name=$(basename "$cwd")
-
-  # Color the context percentage based on usage
-  if [ "$ctx_pct" -ge 60 ]; then
-    ctx_color='\033[01;31m' # red
-  elif [ "$ctx_pct" -ge 40 ]; then
-    ctx_color='\033[01;33m' # yellow
-  else
-    ctx_color='\033[01;32m' # green
-  fi
-
-  LIMITS=""
-  if [ -n "$FIVE_H" ]; then
-    LIMITS="5h: $(rate_color "$FIVE_H")$(printf '%.0f' "$FIVE_H")%\033[00m$(time_left "$FIVE_H_RESET")"
-  fi
-  if [ -n "$WEEK" ]; then
-    LIMITS="${LIMITS:+$LIMITS }| 7d: $(rate_color "$WEEK")$(printf '%.0f' "$WEEK")%\033[00m$(time_left "$WEEK_RESET")"
-  fi
-
   printf '\033[01;36m%s\033[00m | ctx: %b%s%%\033[00m | %b' \
     "$repo_name" "$ctx_color" "$ctx_pct" "$LIMITS"
 else
-  LIMITS=""
-  [ -n "$FIVE_H" ] && LIMITS="5h: $(printf '%.0f' "$FIVE_H")%$(time_left "$FIVE_H_RESET")"
-  [ -n "$WEEK" ] && LIMITS="${LIMITS:+$LIMITS }7d: $(printf '%.0f' "$WEEK")%$(time_left "$WEEK_RESET")"
-
-  printf '\033[01;36m%s\033[00m | ctx: %s%% | %s' "$cwd" "$ctx_pct" "$LIMITS"
+  printf '\033[01;36m%s\033[00m | ctx: %b%s%%\033[00m | %b' \
+    "$cwd" "$ctx_color" "$ctx_pct" "$LIMITS"
 fi
